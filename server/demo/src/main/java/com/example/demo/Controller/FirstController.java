@@ -1,7 +1,5 @@
 package com.example.demo.Controller;
 
-import com.example.demo.Service.StudentService;
-import com.example.demo.Model.Student;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
