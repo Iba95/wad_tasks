@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="task-details"> 
         
     </div>
 </template>

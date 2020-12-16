@@ -1,19 +1,19 @@
 <template>
-  <div id="app">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app" class="container">
+    <Main msg="Welcome to Your Vue.js App" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/Main.vue'
-import './assets/css/tailwind.css'
+import Main from "./components/Main.vue";
+import "./assets/css/tailwind.css";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    Main,
+  },
+};
 </script>
 
 <style>
