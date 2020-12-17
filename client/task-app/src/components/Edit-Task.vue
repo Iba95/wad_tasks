@@ -47,7 +47,7 @@
                 <label for="dateInput">Due til</label>
                 <input
                   v-model="currentTask.date"
-                  type="datetime-local"
+                  type="text"
                   class="form-control"
                   id="dateInput"
                 />
@@ -82,7 +82,9 @@
             >
               Close
             </button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+            <button v-on:click="save" type="button" class="btn btn-primary">
+              Save changes
+            </button>
           </div>
         </div>
       </div>
@@ -91,11 +93,17 @@
 </template>
 
 <script>
+
 export default {
   name: "Edit-Task",
   props: {
     currentTask: {},
   },
+  methods: {
+    save() {
+      this.$emit("saved");
+    },
+  }
 };
 </script>
 

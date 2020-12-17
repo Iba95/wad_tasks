@@ -1,6 +1,7 @@
 <template>
   <div id="app" class="container">
-    <Main msg="Welcome to Your Vue.js App" />
+    <h1 class="mb-6">Winner Winner Tasking Dinner</h1>
+    <Main />
   </div>
 </template>
 
@@ -24,5 +25,6 @@ export default {
   text-align: center;
   color: #2c3e50;
   padding: 10px;
+  padding-top:30px;
 }
 </style>

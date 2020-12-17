@@ -47,9 +47,10 @@
                 <label for="dateInput">Due til</label>
                 <input
                   v-model="currentTask.date"
-                  type="datetime-local"
+                  type="text"
                   class="form-control"
                   id="dateInput"
+                  placeholder="YYYY-MM-DD HH:MM:SS"
                 />
               </div>
               <div class="form-group">
@@ -82,7 +83,7 @@
             >
               Close
             </button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+            <button v-on:click="save" type="button" class="btn btn-primary">Save changes</button>
           </div>
         </div>
       </div>
@@ -91,6 +92,8 @@
 </template>
 
 <script>
+
+
 export default {
   name: "Add-Task",
   props: {},
@@ -104,6 +107,11 @@ export default {
         reference: { url: "" },
       },
     };
+  },
+  methods: {
+    save() {
+      this.$emit("saved");
+    },
   },
 };
 </script>

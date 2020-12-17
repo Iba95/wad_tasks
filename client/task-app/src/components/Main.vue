@@ -81,6 +81,12 @@
       </div>
     </div> -->
 
+    <Task-Details
+      v-if="showDetails"
+      :currentTask="currentTask"
+      @clicked="closeDetails"
+    />
+
     <table class="table">
       <thead>
         <tr>
@@ -93,9 +99,9 @@
         <tr>
           <td v-bind:colspan="columns.length + 2" class="gray-td">
             <button
-              v-on:click="addTask()"
               data-toggle="modal"
               data-target="#addModal"
+              v-on:click="addTask()"
             >
               <i
                 class="bi-plus-circle-fill"
@@ -105,19 +111,18 @@
           </td>
         </tr>
         <tr v-for="element in tasks" :key="element.id">
-          <th>{{ element.title }}</th>
+          <th v-on:click="displayDetails(element)" class="clickable">
+            {{ element.title }}
+          </th>
           <th>{{ element.description }}</th>
           <th>
             <Status :status="element.status.status" />
           </th>
           <th>{{ element.date }}</th>
           <td>
-            <button
-              v-on:click="editTask(element)"
-              data-toggle="modal"
-              data-target="#editModal"
-            >
+            <button data-toggle="modal" data-target="#editModal">
               <i
+                v-on:click.self="editTask(element)"
                 class="bi-pencil-fill"
                 style="font-size: 2rem; color: #0095ff"
               ></i>
@@ -125,19 +130,18 @@
           </td>
           <td>
             <button v-on:click="deleteTask(element.id)">
-              <i class="bi-x" style="font-size: 2rem; color: red"></i>
+              <i class="bi-trash" style="font-size: 2rem; color: #ff5b5b"></i>
             </button>
           </td>
         </tr>
       </tbody>
     </table>
-
     <div v-if="currentTask">
-      <EditTask :currentTask="currentTask" />
+      <EditTask :currentTask="currentTask" @saved="refresh" />
     </div>
 
     <div v-if="newTask">
-      <AddTask />
+      <AddTask @saved="refresh" />
     </div>
   </div>
 </template>
@@ -147,9 +151,10 @@ import axios from "axios";
 import Status from "./Status.vue";
 import EditTask from "./Edit-Task";
 import AddTask from "./Add-Task";
+import TaskDetails from "./Task-Details.vue";
 
 export default {
-  components: { Status, EditTask, AddTask },
+  components: { Status, EditTask, AddTask, TaskDetails },
   name: "Main",
   props: {},
   data() {
@@ -159,6 +164,7 @@ export default {
       currentTask: {},
       modalTitle: "",
       newTask: false,
+      showDetails: false,
     };
   },
   async created() {
@@ -168,18 +174,40 @@ export default {
     async getData() {
       let res = await axios.get("http://localhost:8090/getTasks");
       this.tasks = res.data;
+      this.sortByDate();
     },
     deleteTask(id) {
       this.tasks = this.tasks.filter((el) => el.id != id);
     },
     editTask(task) {
       this.currentTask = task;
+      // let d = this.currentTask.date;
+      // this.currentTask.date = new Date(
+      //   d.getTime() - d.getTimezoneOffset() * 60 * 1000
+      // ).toISOString();
       console.log(this.currentTask);
     },
     addTask() {
       this.currentTask = {};
       this.newTask = true;
       console.log(this.currentTask);
+    },
+    displayDetails(element) {
+      console.log(element);
+      this.currentTask = element;
+      this.showDetails = true;
+    },
+    closeDetails() {
+      this.currentTask = null;
+      this.showDetails = false;
+    },
+    refresh() {
+      console.log("refresh data");
+    },
+    sortByDate() {
+      this.tasks.sort(function (a, b) {
+        return new Date(a.date) - new Date(b.date);
+      });
     },
   },
 };
@@ -189,6 +217,10 @@ export default {
 .gray-td {
   background-color: whitesmoke;
   padding: 0;
+}
+.clickable {
+  cursor: pointer;
+  color: #0095ff;
 }
 </style>
 
