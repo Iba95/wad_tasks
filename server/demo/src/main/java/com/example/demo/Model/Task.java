@@ -9,6 +9,7 @@ public class Task {
     private int id;
     private String title;
     private String description;
+    private String long_description;
     private String date;
     private int id_status;
     private int id_reference;
@@ -47,6 +48,14 @@ public class Task {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getLongDescription() {
+        return long_description;
+    }
+
+    public void setLongDescription(String long_description) {
+        this.long_description = long_description;
     }
 
     public String getDate() {

@@ -35,12 +35,22 @@
               </div>
               <div class="form-group">
                 <label for="descInput">Description</label>
-                <textarea
+                <input
                   v-model="currentTask.description"
                   type="text"
                   class="form-control"
                   id="descInput"
                   placeholder="Check the new..."
+                />
+              </div>
+              <div class="form-group">
+                <label for="longDescInput">Long Description</label>
+                <textarea
+                  v-model="currentTask.longDescription"
+                  type="text"
+                  class="form-control"
+                  id="longDescInput"
+                  placeholder="So in Detail we have...."
                 />
               </div>
               <div class="form-group">
@@ -73,6 +83,18 @@
                   placeholder="url"
                 />
               </div>
+              <div v-if="currentTask.reference" class="form-group">
+                <label for="select">Reference Type</label>
+                <select
+                  v-model="currentTask.reference.type"
+                  class="form-control"
+                  id="select"
+                >
+                  <option>document</option>
+                  <option>paper</option>
+                  <option>reference</option>
+                </select>
+              </div>
             </form>
           </div>
           <div class="modal-footer">
@@ -83,7 +105,9 @@
             >
               Close
             </button>
-            <button v-on:click="save" type="button" class="btn btn-primary">Save changes</button>
+            <button v-on:click="save" type="button" class="btn btn-primary">
+              Save changes
+            </button>
           </div>
         </div>
       </div>
@@ -92,8 +116,7 @@
 </template>
 
 <script>
-
-
+import axios from "axios";
 export default {
   name: "Add-Task",
   props: {},
@@ -102,14 +125,20 @@ export default {
       currentTask: {
         title: "",
         status: "",
+        description: "",
+        longDescription: "",
         date: "",
         contact: { email: "" },
-        reference: { url: "" },
+        reference: { url: "", type: "" },
       },
     };
   },
   methods: {
-    save() {
+    async save() {
+      await axios.post("http://localhost:8090/addTask", this.currentTask);
+      this.emitEvent();
+    },
+    emitEvent() {
       this.$emit("saved");
     },
   },

@@ -1,96 +1,30 @@
 <template>
   <div id="main">
-    <!-- <div class="flex flex-col">
-      <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-          <div
-            class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg"
-          >
-            <table v-if="showTable" class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50">
-                <tr>
-                  <th
-                    v-for="col in columns"
-                    :key="col"
-                    scope="col"
-                    class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    {{ col }}
-                  </th>
-                  <th scope="col" class="relative px-6 py-3">
-                    <span class="sr-only">Edit</span>
-                  </th>
-                  <th scope="col" class="relative px-6 py-3">
-                    <span class="sr-only">Delete</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody class="bg-white divide-y divide-gray-200">
-                <tr>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <button>
-                      <i
-                        class="bi-plus-circle-fill"
-                        style="font-size: 2.5rem; color: teal"
-                      ></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr v-for="element in data" :key="element.id">
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ element.title }}
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ element.description }}
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <span
-                      class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-                    >
-                      {{ element.status.status }}
-                    </span>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ element.date }}
-                  </td>
-
-                  <td
-                    class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
-                  >
-                    <a
-                      href="#"
-                      class="text-indigo-600 hover:text-indigo-900"
-                      data-toggle="modal"
-                      data-target="#editModal"
-                      >Edit</a
-                    >
-                  </td>
-
-                  <td
-                    class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
-                  >
-                    <button>
-                      <i class="bi-x" style="font-size: 2rem; color: red"></i>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div> -->
-
-    <Task-Details
-      v-if="showDetails"
-      :currentTask="currentTask"
-      @clicked="closeDetails"
-    />
-
+    <transition name="fade">
+      <Task-Details
+        v-if="showDetails"
+        :currentTask="currentTask"
+        @clicked="closeDetails"
+      />
+    </transition>
     <table class="table">
       <thead>
         <tr>
-          <th v-for="col in columns" :key="col" scope="col">{{ col }}</th>
+          <th
+            v-for="col in columns"
+            :key="col"
+            scope="col"
+            v-on:click="sort(col)"
+            v-bind:class="[
+              {
+                active: correctColNames(col) == currentSort,
+                down: down,
+                up: up,
+              },
+            ]"
+          >
+            {{ col }}
+          </th>
           <th scope="col"></th>
           <th scope="col"></th>
         </tr>
@@ -165,6 +99,10 @@ export default {
       modalTitle: "",
       newTask: false,
       showDetails: false,
+      currentSort: "",
+      currentSortDir: "asc",
+      down: false,
+      up: false,
     };
   },
   async created() {
@@ -173,18 +111,16 @@ export default {
   methods: {
     async getData() {
       let res = await axios.get("http://localhost:8090/getTasks");
+      console.log(res);
       this.tasks = res.data;
-      this.sortByDate();
+      this.sort("date");
     },
-    deleteTask(id) {
+    async deleteTask(id) {
+      await axios.post(`http://localhost:8090/deleteTask?id=${id}`);
       this.tasks = this.tasks.filter((el) => el.id != id);
     },
     editTask(task) {
       this.currentTask = task;
-      // let d = this.currentTask.date;
-      // this.currentTask.date = new Date(
-      //   d.getTime() - d.getTimezoneOffset() * 60 * 1000
-      // ).toISOString();
       console.log(this.currentTask);
     },
     addTask() {
@@ -201,13 +137,47 @@ export default {
       this.currentTask = null;
       this.showDetails = false;
     },
-    refresh() {
-      console.log("refresh data");
+    async refresh() {
+      await this.getData();
     },
-    sortByDate() {
+    sort(s) {
+      s = this.correctColNames(s);
+      if (s === this.currentSort) {
+        this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
+      }
+      if (this.currentSortDir == "desc") this.down = true;
+      else this.down = false;
+      if (this.currentSortDir == "asc") this.up = true;
+      else this.up = false;
+      this.currentSort = s;
+      this.sortedTasks(this.currentSortDir, s);
+    },
+    sortedTasks(dir, s) {
       this.tasks.sort(function (a, b) {
-        return new Date(a.date) - new Date(b.date);
+        if (dir === "desc") {
+          if (s == "date") return new Date(a.date) - new Date(b.date);
+          else if (s == "status")
+            return a.status.status.localeCompare(b.status.status);
+          else return ("" + a[s]).localeCompare(b[s]);
+        } else {
+          if (s == "date") return new Date(b.date) - new Date(a.date);
+          else if (s == "status")
+            return b.status.status.localeCompare(a.status.status);
+          else return ("" + b[s]).localeCompare(a[s]);
+        }
       });
+    },
+    correctColNames(col) {
+      switch (col) {
+        case "Title":
+          return "title";
+        case "Status":
+          return "status";
+        case "Description":
+          return "description";
+        case "Due at":
+          return "date";
+      }
     },
   },
 };
@@ -221,6 +191,32 @@ export default {
 .clickable {
   cursor: pointer;
   color: #0095ff;
+}
+
+.active.up::after {
+  content: " ";
+  position: relative;
+  left: 8px;
+  top: 12px;
+  border: 8px solid transparent;
+  border-top-color: silver;
+}
+
+.active.down::after {
+  content: " ";
+  position: relative;
+  left: 8px;
+  bottom: 12px;
+  border: 8px solid transparent;
+  border-bottom-color: silver;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>
 

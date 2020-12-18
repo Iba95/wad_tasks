@@ -35,12 +35,22 @@
               </div>
               <div class="form-group">
                 <label for="descInput">Description</label>
-                <textarea
+                <input
                   v-model="currentTask.description"
                   type="text"
                   class="form-control"
                   id="descInput"
                   placeholder="Check the new..."
+                />
+              </div>
+              <div class="form-group">
+                <label for="longDescInput">Long Description</label>
+                <textarea
+                  v-model="currentTask.longDescription"
+                  type="text"
+                  class="form-control"
+                  id="longDescInput"
+                  placeholder="So in Detail we have...."
                 />
               </div>
               <div class="form-group">
@@ -72,6 +82,14 @@
                   placeholder="url"
                 />
               </div>
+              <div v-if="currentTask.reference" class="form-group">
+                <label for="select">Reference Type</label>
+                <select v-model="currentTask.reference.type" class="form-control" id="select">
+                  <option>document</option>
+                  <option>paper</option>
+                  <option>reference</option>
+                </select>
+              </div>
             </form>
           </div>
           <div class="modal-footer">
@@ -93,17 +111,24 @@
 </template>
 
 <script>
-
+import axios from "axios";
 export default {
   name: "Edit-Task",
   props: {
     currentTask: {},
   },
   methods: {
-    save() {
+    async save() {
+      await axios.put(
+        `http://localhost:8090/editTask?id=${this.currentTask.id}`,
+        this.currentTask
+      );
+      this.emitEvent();
+    },
+    emitEvent() {
       this.$emit("saved");
     },
-  }
+  },
 };
 </script>
 

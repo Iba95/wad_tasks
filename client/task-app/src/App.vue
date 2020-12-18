@@ -25,6 +25,10 @@ export default {
   text-align: center;
   color: #2c3e50;
   padding: 10px;
-  padding-top:30px;
+  padding-top: 30px;
+}
+button:focus {
+  outline: 1px dotted;
+  outline: none !important;
 }
 </style>
