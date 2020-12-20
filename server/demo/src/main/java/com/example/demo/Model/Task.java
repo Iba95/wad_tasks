@@ -1,6 +1,9 @@
 package com.example.demo.Model;
 
 import javax.persistence.*;
+import java.sql.Date;
+import java.util.List;
+import java.util.Set;
 
 @Entity(name = "tasks")
 public class Task {
@@ -10,13 +13,22 @@ public class Task {
     private String title;
     private String description;
     private String long_description;
-    private String date;
+    private Date date;
     private int id_status;
     private int id_reference;
     private int id_contact;
     @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "id_status", updatable = false,insertable = false)
     private Status status;
+
+    public String getLong_description() {
+        return long_description;
+    }
+
+    public void setLong_description(String long_description) {
+        this.long_description = long_description;
+    }
+
     @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "id_reference", updatable = false,insertable = false)
     private Reference reference;
@@ -58,11 +70,11 @@ public class Task {
         this.long_description = long_description;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

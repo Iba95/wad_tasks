@@ -1,5 +1,6 @@
 package com.example.demo.Model;
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity(name = "contacts")
 public class Contact {
@@ -7,6 +8,17 @@ public class Contact {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String email;
+
+    @OneToMany(mappedBy = "contact", fetch = FetchType.LAZY)
+    private Set<Task> tasks;
+
+    public Set<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
+    }
 
     public Contact() {
     }
