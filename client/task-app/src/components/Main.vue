@@ -14,6 +14,7 @@
             v-for="col in columns"
             :key="col"
             scope="col"
+            class="cursor-pointer"
             v-on:click="sort(col)"
             v-bind:class="[
               {
@@ -38,33 +39,41 @@
               v-on:click="addTask()"
             >
               <i
-                class="bi-plus-circle-fill"
-                style="font-size: 2.5rem; color: teal"
+                class="bi-plus-circle-fill text-indigo-600 hover:text-indigo-700"
+                style="font-size: 2.5rem"
               ></i>
             </button>
           </td>
         </tr>
         <tr v-for="element in tasks" :key="element.id">
-          <th v-on:click="displayDetails(element)" class="clickable">
+          <td>
             {{ element.title }}
-          </th>
-          <th>{{ element.description }}</th>
-          <th>
+          </td>
+          <td>
+            {{ element.description.slice(0, 15) }}...
+            <span class="text-blue-400 hover:text-blue-500 cursor-pointer" v-on:click="displayDetails(element)"
+              >Show More</span
+            >
+          </td>
+          <td>
             <Status :status="element.status.status" />
-          </th>
-          <th>{{ element.date }}</th>
+          </td>
+          <td>{{ element.date }}</td>
           <td>
             <button data-toggle="modal" data-target="#editModal">
               <i
                 v-on:click.self="editTask(element)"
-                class="bi-pencil-fill"
-                style="font-size: 2rem; color: #0095ff"
+                class="bi-pencil-fill text-indigo-600 hover:text-indigo-700"
+                style="font-size: 2rem"
               ></i>
             </button>
           </td>
           <td>
             <button v-on:click="deleteTask(element.id)">
-              <i class="bi-trash" style="font-size: 2rem; color: #ff5b5b"></i>
+              <i
+                class="bi-trash text-red-400 hover:text-red-500"
+                style="font-size: 2rem"
+              ></i>
             </button>
           </td>
         </tr>
@@ -197,7 +206,7 @@ export default {
   content: " ";
   position: relative;
   left: 8px;
-  top: 12px;
+  top: 15px;
   border: 8px solid transparent;
   border-top-color: silver;
 }
@@ -209,6 +218,9 @@ export default {
   bottom: 12px;
   border: 8px solid transparent;
   border-bottom-color: silver;
+}
+thead tr {
+  border-top: hidden;
 }
 
 .fade-enter-active,

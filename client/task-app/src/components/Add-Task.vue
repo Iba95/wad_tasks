@@ -22,7 +22,7 @@
             </button>
           </div>
           <div class="modal-body text-left">
-            <form>
+            <form autocomplete="on">
               <div class="form-group">
                 <label for="titelInput">Task Title</label>
                 <input
@@ -35,7 +35,7 @@
               </div>
               <div class="form-group">
                 <label for="descInput">Description</label>
-                <input
+                <textarea
                   v-model="currentTask.description"
                   type="text"
                   class="form-control"
@@ -43,7 +43,7 @@
                   placeholder="Check the new..."
                 />
               </div>
-              <div class="form-group">
+              <!-- <div class="form-group">
                 <label for="longDescInput">Long Description</label>
                 <textarea
                   v-model="currentTask.longDescription"
@@ -52,7 +52,7 @@
                   id="longDescInput"
                   placeholder="So in Detail we have...."
                 />
-              </div>
+              </div> -->
               <div class="form-group">
                 <label for="dateInput">Due til</label>
                 <input
@@ -67,10 +67,10 @@
                 <label for="contactInput">Contact</label>
                 <input
                   v-model="currentTask.contact.email"
-                  type="text"
+                  type="email"
                   class="form-control"
                   id="contactInput"
-                  placeholder="Mustermann "
+                  placeholder="max@example.com"
                 />
               </div>
               <div class="form-group">
@@ -101,11 +101,15 @@
             <button
               type="button"
               data-dismiss="modal"
-              class="btn btn-secondary"
+              class="btn btn-light rounded-md border border-gray-300"
             >
               Close
             </button>
-            <button v-on:click="save" type="button" class="btn btn-primary">
+            <button
+              v-on:click="save"
+              type="submit"
+              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
               Save changes
             </button>
           </div>
@@ -126,7 +130,6 @@ export default {
         title: "",
         status: "",
         description: "",
-        longDescription: "",
         date: "",
         contact: { email: "" },
         reference: { url: "", type: "" },
@@ -135,8 +138,12 @@ export default {
   },
   methods: {
     async save() {
-      await axios.post("http://localhost:8090/addTask", this.currentTask);
-      this.emitEvent();
+      try {
+        await axios.post("http://localhost:8090/addTask", this.currentTask);
+        this.emitEvent();
+      } catch (error) {
+        console.log(error);
+      }
     },
     emitEvent() {
       this.$emit("saved");
@@ -144,5 +151,18 @@ export default {
   },
 };
 </script>
+
+<style>
+.modal-footer {
+  border-top: 0 !important;
+  background-color: #f3f3f3;
+}
+.modal-header {
+  border-bottom: 0 !important;
+}
+.modal-content {
+  border: 0 !important;
+}
+</style>
 
 

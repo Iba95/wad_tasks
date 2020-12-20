@@ -4,17 +4,20 @@
       <div class="card-body">
         <h5 class="card-title row justify-content-center">{{ currentTask.title }}</h5>
 
-        <h6 class="card-subtitle mb-2 text-muted row justify-content-center">
+        <!-- <h6 class="card-subtitle mb-2 text-muted row justify-content-center">
           {{ currentTask.description }}
-        </h6>
+        </h6> -->
 
         <div>
           <hr />
-          <p>{{ currentTask.longDescription }}</p>
+          <!-- <p>{{ currentTask.longDescription }}</p> -->
+          <h6 class="card-subtitle mb-2 text-muted row justify-content-center">
+          {{ currentTask.description }}
+        </h6>
           <hr />
         </div>
 
-        <div class="row justify-content-center mb-2">
+        <div class="row justify-content-center mb-3">
           <Status :status="currentTask.status.status" />
         </div>
         <div class=" mb-2 bg-gray-50">
