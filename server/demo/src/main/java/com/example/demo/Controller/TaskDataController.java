@@ -11,6 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:8000")
 @RestController
@@ -25,22 +26,19 @@ public class TaskDataController {
         return tservice.getAllTasks();
     }
 
-    @GetMapping("/getTest")
-    public void getTest(){
-         tservice.deleteTask(1);
+    @GetMapping("/action=delete&taskId={id}")
+    public List<Task> getProducts(@PathVariable String id){
+        return tservice.deleteTask(Integer.parseInt(id));
     }
+
     @PostMapping("/addTask")
     public Task addTask(@RequestBody Task task){
         return tservice.addTask(task);
     }
 
-    @PutMapping("/updateTask?id={id}")
+    @PutMapping("/action=update&taskId={id}")
     public Task updateTask(@RequestBody Task task){
         return tservice.updateTask(task);
     }
 
-    @GetMapping("/deleteTask?id={id}")
-    public void deleteTask(@PathVariable Integer id) {
-        tservice.deleteTask(id);
-    }
 }

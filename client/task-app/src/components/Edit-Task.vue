@@ -128,7 +128,7 @@ export default {
   methods: {
     async save() {
       await axios.put(
-        `http://localhost:8090/editTask?id=${this.currentTask.id}`,
+        `http://localhost:8090/action=update&taskId=${this.currentTask.id}`,
         this.currentTask
       );
       this.emitEvent();

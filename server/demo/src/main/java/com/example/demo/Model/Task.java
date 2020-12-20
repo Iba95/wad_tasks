@@ -16,14 +16,14 @@ public class Task {
     private int id_status;
     private int id_reference;
     private int id_contact;
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(cascade=CascadeType.DETACH)
     @JoinColumn(name = "id_status", updatable = false,insertable = false)
     private Status status;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(cascade=CascadeType.DETACH)
     @JoinColumn(name = "id_reference", updatable = false,insertable = false)
     private Reference reference;
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(cascade=CascadeType.DETACH)
     @JoinColumn(name = "id_contact", updatable = false,insertable = false)
     private Contact contact;
 

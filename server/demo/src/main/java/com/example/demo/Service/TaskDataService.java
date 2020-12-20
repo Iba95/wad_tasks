@@ -74,7 +74,7 @@ public class TaskDataService {
         //get status id
         String _status = task.getStatus().getStatus();
         Status status = statusRepository.findStatusByStatus(_status);
-        //task.setStatus(status);
+        task.setStatus(status);
 
         //save task in database
         return tasksRepository.save(task);
@@ -85,7 +85,8 @@ public class TaskDataService {
         return tasksRepository.save(task);
     }
 
-    public void deleteTask(Integer id) {
+    public List<Task> deleteTask(Integer id) {
         tasksRepository.deleteById(id);
+        return (List<Task>) tasksRepository.findAll();
     }
 }
