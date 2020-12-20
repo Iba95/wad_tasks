@@ -36,9 +36,10 @@ public class TaskDataService {
     }
 
     public Task addTask(Task task) {
-        //save contact if not exist
+
+        // save contact if not exist
         String email = task.getContact().getEmail();
-        Contact contact = contactRepository.findContactByEmail(email);
+        Contact contact = contactRepository.findByEmail(email);
 
         if(contact !=null){
 
@@ -50,13 +51,15 @@ public class TaskDataService {
             //if not needs to be created
             contact.setEmail(email);
             contactRepository.save(contact);
-            task.setContact(contactRepository.findContactByEmail(email));
+            Contact c = contactRepository.findByEmail(email);
+            task.setContact(contactRepository.findByEmail(email));
+            task.setId_contact(c.getId());
 
         }
 
         //save reference if not exist
         String url = task.getReference().getUrl();
-        Reference reference = referenceRepository.findReferenceByUrl(url);
+        Reference reference = referenceRepository.findByUrl(url);
 
         if(reference != null){
 
@@ -67,21 +70,29 @@ public class TaskDataService {
             //reference needs to be created
             reference.setType(task.getReference().getType());
             reference.setUrl(url);
+            reference.setId(1 + (int)(Math.random() * ((240 - 1) + 1)));
             referenceRepository.save(reference);
-            task.setReference(referenceRepository.findReferenceByUrl(url));
+            task.setReference(referenceRepository.findByUrl(url));
         }
 
         //get status id
         String _status = task.getStatus().getStatus();
-        Status status = statusRepository.findStatusByStatus(_status);
+        Status status = statusRepository.findByStatus(_status);
+        int s_id = status.getId();
         task.setStatus(status);
+        task.setId_status(s_id);
+        task.setId(1 + (int)(Math.random() * ((240 - 1) + 1)));
 
         //save task in database
-        return tasksRepository.save(task);
+       return tasksRepository.save(task);
 
     }
 
     public Task updateTask(Task task) {
+
+        contactRepository.save(task.getContact());
+        referenceRepository.save(task.getReference());
+        statusRepository.save(task.getStatus());
         return tasksRepository.save(task);
     }
 

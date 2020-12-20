@@ -3,6 +3,7 @@ package com.example.demo.Model;
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Entity(name = "tasks")

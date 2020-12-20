@@ -4,4 +4,5 @@ import com.example.demo.Model.Task;
 import org.springframework.data.repository.CrudRepository;
 
 public interface TasksRepository extends CrudRepository<Task, Integer> {
+    Task findByTitle(String title);
 }

@@ -4,6 +4,6 @@ import com.example.demo.Model.Reference;
 import org.springframework.data.repository.CrudRepository;
 
 public interface ReferenceRepository extends CrudRepository<Reference, Integer> {
-    Reference findReferenceByUrl(String url);
+    Reference findByUrl(String url);
 
 }
