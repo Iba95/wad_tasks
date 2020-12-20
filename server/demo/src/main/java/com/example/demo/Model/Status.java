@@ -1,5 +1,6 @@
 package com.example.demo.Model;
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity(name = "status")
 public class Status {
@@ -8,6 +9,19 @@ public class Status {
     private int id;
     private String status;
 
+    public Set<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    @OneToMany(mappedBy = "status", fetch = FetchType.LAZY)
+    private Set<Task> tasks;
+
+    public Status() {
+    }
 
     public int getId() {
         return id;

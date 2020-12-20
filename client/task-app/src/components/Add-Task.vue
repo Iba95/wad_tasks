@@ -127,7 +127,7 @@ export default {
   data() {
     return {
       currentTask: {
-        title: "",
+        title:{ status: ""},
         status: "",
         description: "",
         date: "",
