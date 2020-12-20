@@ -12,7 +12,6 @@ public class Task {
     private int id;
     private String title;
     private String description;
-    private String long_description;
     private Date date;
     private int id_status;
     private int id_reference;
@@ -20,14 +19,6 @@ public class Task {
     @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "id_status", updatable = false,insertable = false)
     private Status status;
-
-    public String getLong_description() {
-        return long_description;
-    }
-
-    public void setLong_description(String long_description) {
-        this.long_description = long_description;
-    }
 
     @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "id_reference", updatable = false,insertable = false)
@@ -60,14 +51,6 @@ public class Task {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getLongDescription() {
-        return long_description;
-    }
-
-    public void setLongDescription(String long_description) {
-        this.long_description = long_description;
     }
 
     public Date getDate() {

@@ -9,16 +9,6 @@ public class Status {
     private int id;
     private String status;
 
-    public Set<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(Set<Task> tasks) {
-        this.tasks = tasks;
-    }
-
-    @OneToMany(mappedBy = "status", fetch = FetchType.LAZY)
-    private Set<Task> tasks;
 
     public Status() {
     }

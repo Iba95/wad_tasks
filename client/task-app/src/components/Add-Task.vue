@@ -33,6 +33,21 @@
                   placeholder="task 1"
                 />
               </div>
+
+              <div class="form-group">
+                <label for="selectStatus">Status</label>
+                <select
+                  v-model="currentTask.status.status"
+                  class="form-control"
+                  id="selectStatus"
+                >
+                  <option>Doing</option>
+                  <option>Idea</option>
+                  <option>In Review</option>
+                  <option>ToDo Next</option>
+                  <option>Done</option>
+                </select>
+              </div>
               <div class="form-group">
                 <label for="descInput">Description</label>
                 <textarea
@@ -127,10 +142,10 @@ export default {
   data() {
     return {
       currentTask: {
-        title:{ status: ""},
-        status: "",
+        title: "",
+        status: { status: "" },
         description: "",
-        date: "",
+        date: new Date(),
         contact: { email: "" },
         reference: { url: "", type: "" },
       },

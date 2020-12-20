@@ -9,17 +9,6 @@ public class Contact {
     private int id;
     private String email;
 
-    @OneToMany(mappedBy = "contact", fetch = FetchType.LAZY)
-    private Set<Task> tasks;
-
-    public Set<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(Set<Task> tasks) {
-        this.tasks = tasks;
-    }
-
     public Contact() {
     }
 

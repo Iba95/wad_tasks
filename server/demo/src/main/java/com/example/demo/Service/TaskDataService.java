@@ -80,4 +80,12 @@ public class TaskDataService {
         return tasksRepository.save(task);
 
     }
+
+    public Task updateTask(Task task) {
+        return tasksRepository.save(task);
+    }
+
+    public void deleteTask(Integer id) {
+        tasksRepository.deleteById(id);
+    }
 }

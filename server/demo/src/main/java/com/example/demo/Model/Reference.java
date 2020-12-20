@@ -10,17 +10,6 @@ public class Reference {
     private String url;
     private String type;
 
-    public Set<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(Set<Task> tasks) {
-        this.tasks = tasks;
-    }
-
-    @OneToMany(mappedBy = "reference", fetch = FetchType.LAZY)
-    private Set<Task> tasks;
-
     public Reference() {
     }
 

@@ -125,7 +125,7 @@ export default {
       this.sort("date");
     },
     async deleteTask(id) {
-      await axios.post(`http://localhost:8090/deleteTask?id=${id}`);
+      await axios.get(`http://localhost:8090/getTest?id=${id}`);
       this.tasks = this.tasks.filter((el) => el.id != id);
     },
     editTask(task) {
