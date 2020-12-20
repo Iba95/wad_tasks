@@ -43,21 +43,11 @@
                   placeholder="Check the new..."
                 />
               </div>
-              <!-- <div class="form-group">
-                <label for="longDescInput">Long Description</label>
-                <textarea
-                  v-model="currentTask.longDescription"
-                  type="text"
-                  class="form-control"
-                  id="longDescInput"
-                  placeholder="So in Detail we have...."
-                />
-              </div> -->
               <div class="form-group">
                 <label for="dateInput">Due til</label>
                 <input
                   v-model="currentTask.date"
-                  type="text"
+                  type="date"
                   class="form-control"
                   id="dateInput"
                 />
@@ -94,23 +84,23 @@
                   <option>reference</option>
                 </select>
               </div>
+              <div class="btns">
+                <button
+                  type="button"
+                  data-dismiss="modal"
+                  class="btn btn-light rounded-md border border-gray-300"
+                >
+                  Close
+                </button>
+                <button
+                  v-on:click.prevent="save"
+                  type="submit"
+                  class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Save changes
+                </button>
+              </div>
             </form>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              data-dismiss="modal"
-              class="btn btn-light rounded-md border border-gray-300"
-            >
-              Close
-            </button>
-            <button
-              v-on:click="save"
-              type="submit"
-              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Save changes
-            </button>
           </div>
         </div>
       </div>
@@ -127,11 +117,15 @@ export default {
   },
   methods: {
     async save() {
-      await axios.put(
-        `http://localhost:8090/action=update&taskId=${this.currentTask.id}`,
-        this.currentTask
-      );
-      this.emitEvent();
+      try {
+        await axios.put(
+          `http://localhost:8090/action=update&taskId=${this.currentTask.id}`,
+          this.currentTask
+        );
+        this.emitEvent();
+      } catch (error) {
+        console.log(error);
+      }
     },
     emitEvent() {
       this.$emit("saved");
@@ -141,9 +135,15 @@ export default {
 </script>
 
 <style>
-.modal-footer {
+.btns {
   border-top: 0 !important;
-  background-color: #f3f3f3;
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+}
+
+.btns button:last-child {
+  margin-left: 15px;
 }
 .modal-header {
   border-bottom: 0 !important;
